@@ -1,0 +1,69 @@
+import type {
+  Product,
+  ProductsResponse,
+  ProductFilters,
+  Category,
+} from "@/types";
+import apiClient from "./client";
+
+export const productsApi = {
+  getAll: async (filters?: ProductFilters): Promise<ProductsResponse> => {
+    const response = await apiClient.get("/products", { params: filters });
+    return response.data;
+  },
+
+  getBySlug: async (slug: string): Promise<Product> => {
+    const response = await apiClient.get(`/products/${slug}`);
+    return response.data;
+  },
+
+  getById: async (id: string): Promise<Product> => {
+    const response = await apiClient.get(`/products/id/${id}`);
+    return response.data;
+  },
+
+  getFeatured: async (limit = 8): Promise<Product[]> => {
+    const response = await apiClient.get("/products/featured", {
+      params: { limit },
+    });
+    return response.data;
+  },
+
+  getRelated: async (productId: string, limit = 4): Promise<Product[]> => {
+    const response = await apiClient.get(`/products/${productId}/related`, {
+      params: { limit },
+    });
+    return response.data;
+  },
+
+  search: async (query: string, limit = 10): Promise<Product[]> => {
+    const response = await apiClient.get("/products/search", {
+      params: { q: query, limit },
+    });
+    return response.data;
+  },
+};
+
+export const categoriesApi = {
+  getAll: async (): Promise<Category[]> => {
+    const response = await apiClient.get("/categories");
+    return response.data;
+  },
+
+  getBySlug: async (slug: string): Promise<Category> => {
+    const response = await apiClient.get(`/categories/${slug}`);
+    return response.data;
+  },
+
+  getWithProducts: async (
+    slug: string,
+    filters?: ProductFilters
+  ): Promise<{ category: Category; products: ProductsResponse }> => {
+    const response = await apiClient.get(`/categories/${slug}/products`, {
+      params: filters,
+    });
+    return response.data;
+  },
+};
+
+export default productsApi;
