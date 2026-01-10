@@ -2,7 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 import { API_URL, STORAGE_KEYS } from "../constants";
 
 export const apiClient = axios.create({
-  baseURL: API_URL,
+  baseURL: `${API_URL}/api/v1`,
   headers: {
     "Content-Type": "application/json",
   },
@@ -34,39 +34,43 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      try {
-        const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
+      // Only try to refresh if we have tokens (authenticated user)
+      const accessToken = localStorage.getItem(STORAGE_KEYS.ACCESS_TOKEN);
+      const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
 
-        if (!refreshToken) {
-          throw new Error("No refresh token");
+      // If we have tokens, try to refresh
+      if (accessToken && refreshToken) {
+        try {
+          const response = await axios.post(`${API_URL}/api/v1/auth/refresh`, {
+            refreshToken,
+          });
+
+          const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
+            response.data.data;
+
+          localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, newAccessToken);
+          localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, newRefreshToken);
+
+          if (originalRequest.headers) {
+            originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          }
+
+          return apiClient(originalRequest);
+        } catch (refreshError) {
+          // Clear tokens and redirect to login only if refresh fails
+          localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+          localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+
+          if (typeof window !== "undefined") {
+            window.location.href = "/login";
+          }
+
+          return Promise.reject(refreshError);
         }
-
-        const response = await axios.post(`${API_URL}/auth/refresh`, {
-          refreshToken,
-        });
-
-        const { accessToken, refreshToken: newRefreshToken } =
-          response.data.tokens;
-
-        localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
-        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, newRefreshToken);
-
-        if (originalRequest.headers) {
-          originalRequest.headers.Authorization = `Bearer ${accessToken}`;
-        }
-
-        return apiClient(originalRequest);
-      } catch (refreshError) {
-        // Clear tokens and redirect to login
-        localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
-        localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
-
-        if (typeof window !== "undefined") {
-          window.location.href = "/login";
-        }
-
-        return Promise.reject(refreshError);
       }
+      
+      // If no tokens exist, this might be a public endpoint - just reject without redirect
+      // The error will be handled by the component
     }
 
     return Promise.reject(error);

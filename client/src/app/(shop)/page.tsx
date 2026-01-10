@@ -1,10 +1,26 @@
+"use client";
+
+import React from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Container, Button } from "@/components/ui";
 import { ROUTES } from "@/lib/constants";
 import { HeroCarousel } from "@/components/home/hero-carousel";
+import { useFeaturedProducts, useCategories } from "@/hooks/use-products";
+import { ProductCard } from "@/components/products/product-card";
 
 export default function HomePage() {
+  const { data: featuredProducts, isLoading: productsLoading } =
+    useFeaturedProducts(8);
+  const { data: categories, isLoading: categoriesLoading } = useCategories();
+
+  // Get 6 random main categories (not necessarily the first 6)
+  const mainCategories = React.useMemo(() => {
+    const rootCategories = categories?.filter((cat) => !cat.parent) || [];
+    // Shuffle and take 6
+    return [...rootCategories].sort(() => Math.random() - 0.5).slice(0, 6);
+  }, [categories]);
+
   return (
     <>
       {/* Hero Carousel Section */}
@@ -31,18 +47,30 @@ export default function HomePage() {
             </Link>
           </div>
 
-          {/* Placeholder for ProductGrid - will be populated when API is connected */}
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:gap-6">
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="group">
-                <div className="aspect-square rounded-xl bg-gray-100" />
-                <div className="mt-4 space-y-2">
-                  <div className="h-4 w-2/3 rounded bg-gray-100" />
-                  <div className="h-4 w-1/3 rounded bg-gray-100" />
+          {/* Product Grid */}
+          {productsLoading ? (
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:gap-6">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <div key={i} className="group">
+                  <div className="aspect-square rounded-xl bg-gray-100 shadow-md animate-pulse" />
+                  <div className="mt-4 space-y-2">
+                    <div className="h-4 w-2/3 rounded bg-gray-100 animate-pulse" />
+                    <div className="h-4 w-1/3 rounded bg-gray-100 animate-pulse" />
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : featuredProducts && featuredProducts.length > 0 ? (
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:gap-6">
+              {featuredProducts.map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No featured products available</p>
+            </div>
+          )}
 
           <div className="mt-8 text-center sm:hidden">
             <Button asChild variant="outline">
@@ -64,26 +92,40 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:gap-6">
-            {["Electronics", "Fashion", "Home & Living", "Sports"].map(
-              (category) => (
+          {categoriesLoading ? (
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-6">
+              {[1, 2, 3].map((i) => (
+                <div
+                  key={i}
+                  className="aspect-square rounded-xl bg-gray-200 animate-pulse"
+                />
+              ))}
+            </div>
+          ) : mainCategories.length > 0 ? (
+            <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:gap-6">
+              {mainCategories.map((category) => (
                 <Link
-                  key={category}
-                  href={`/categories/${category
-                    .toLowerCase()
-                    .replace(/ & /g, "-")}`}
-                  className="group relative aspect-square overflow-hidden rounded-xl bg-gray-200"
+                  key={category.id}
+                  href={`/categories/${category.slug}`}
+                  className="group relative aspect-square overflow-hidden rounded-xl bg-gray-200 hover:shadow-xl transition-shadow"
                 >
                   <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4">
                     <h3 className="text-lg font-semibold text-white">
-                      {category}
+                      {category.name}
                     </h3>
+                    <p className="text-sm text-gray-200 mt-1">
+                      {category.description}
+                    </p>
                   </div>
                 </Link>
-              )
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500">No categories available</p>
+            </div>
+          )}
         </Container>
       </section>
 

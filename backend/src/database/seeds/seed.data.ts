@@ -1,0 +1,480 @@
+/**
+ * Seed Data for Ecommerce Application
+ * Based on clothing navigation structure
+ */
+
+export const categoriesData = [
+  // Men Categories
+  { name: 'Men', slug: 'men', description: 'Shop men\'s clothing, shoes, and accessories', parent: null },
+  { name: 'Men Clothing', slug: 'men-clothing', description: 'Men\'s apparel', parent: 'men' },
+  { name: 'Men Shoes', slug: 'men-shoes', description: 'Men\'s footwear', parent: 'men' },
+  { name: 'Men Accessories', slug: 'men-accessories', description: 'Men\'s accessories', parent: 'men' },
+  
+  // Men Clothing Subcategories
+  { name: 'T-Shirts & Tops', slug: 'men-t-shirts', parent: 'men-clothing' },
+  { name: 'Hoodies & Sweatshirts', slug: 'men-hoodies', parent: 'men-clothing' },
+  { name: 'Jackets & Coats', slug: 'men-jackets', parent: 'men-clothing' },
+  { name: 'Pants & Joggers', slug: 'men-pants', parent: 'men-clothing' },
+  { name: 'Shorts', slug: 'men-shorts', parent: 'men-clothing' },
+  
+  // Men Shoes Subcategories
+  { name: 'Sneakers', slug: 'men-sneakers', parent: 'men-shoes' },
+  { name: 'Running Shoes', slug: 'men-running-shoes', parent: 'men-shoes' },
+  { name: 'Casual Shoes', slug: 'men-casual-shoes', parent: 'men-shoes' },
+  { name: 'Sandals & Slides', slug: 'men-sandals', parent: 'men-shoes' },
+  
+  // Men Accessories Subcategories
+  { name: 'Bags & Backpacks', slug: 'men-bags', parent: 'men-accessories' },
+  { name: 'Hats & Caps', slug: 'men-hats', parent: 'men-accessories' },
+  { name: 'Socks', slug: 'men-socks', parent: 'men-accessories' },
+  { name: 'Watches', slug: 'men-watches', parent: 'men-accessories' },
+
+  // Women Categories
+  { name: 'Women', slug: 'women', description: 'Shop women\'s clothing, shoes, and accessories', parent: null },
+  { name: 'Women Clothing', slug: 'women-clothing', description: 'Women\'s apparel', parent: 'women' },
+  { name: 'Women Shoes', slug: 'women-shoes', description: 'Women\'s footwear', parent: 'women' },
+  { name: 'Women Accessories', slug: 'women-accessories', description: 'Women\'s accessories', parent: 'women' },
+  
+  // Women Clothing Subcategories
+  { name: 'Dresses', slug: 'women-dresses', parent: 'women-clothing' },
+  { name: 'Tops & Blouses', slug: 'women-tops', parent: 'women-clothing' },
+  { name: 'Jackets & Coats', slug: 'women-jackets', parent: 'women-clothing' },
+  { name: 'Pants & Leggings', slug: 'women-pants', parent: 'women-clothing' },
+  { name: 'Skirts', slug: 'women-skirts', parent: 'women-clothing' },
+  
+  // Women Shoes Subcategories
+  { name: 'Sneakers', slug: 'women-sneakers', parent: 'women-shoes' },
+  { name: 'Heels', slug: 'women-heels', parent: 'women-shoes' },
+  { name: 'Boots', slug: 'women-boots', parent: 'women-shoes' },
+  { name: 'Sandals', slug: 'women-sandals', parent: 'women-shoes' },
+  
+  // Women Accessories Subcategories
+  { name: 'Bags & Purses', slug: 'women-bags', parent: 'women-accessories' },
+  { name: 'Jewelry', slug: 'women-jewelry', parent: 'women-accessories' },
+  { name: 'Sunglasses', slug: 'women-sunglasses', parent: 'women-accessories' },
+  { name: 'Scarves', slug: 'women-scarves', parent: 'women-accessories' },
+
+  // Kids Categories
+  { name: 'Kids', slug: 'kids', description: 'Shop kids\' clothing and shoes', parent: null },
+  { name: 'Boys', slug: 'kids-boys', description: 'Boys\' clothing', parent: 'kids' },
+  { name: 'Girls', slug: 'kids-girls', description: 'Girls\' clothing', parent: 'kids' },
+  { name: 'Baby', slug: 'kids-baby', description: 'Baby clothing', parent: 'kids' },
+  
+  // Boys Subcategories
+  { name: 'Boys T-Shirts & Tops', slug: 'boys-t-shirts', parent: 'kids-boys' },
+  { name: 'Boys Pants & Shorts', slug: 'boys-pants', parent: 'kids-boys' },
+  { name: 'Boys Shoes', slug: 'boys-shoes', parent: 'kids-boys' },
+  { name: 'Boys Jackets', slug: 'boys-jackets', parent: 'kids-boys' },
+  
+  // Girls Subcategories
+  { name: 'Girls Dresses', slug: 'girls-dresses', parent: 'kids-girls' },
+  { name: 'Girls Tops & Blouses', slug: 'girls-tops', parent: 'kids-girls' },
+  { name: 'Girls Shoes', slug: 'girls-shoes', parent: 'kids-girls' },
+  { name: 'Girls Jackets', slug: 'girls-jackets', parent: 'kids-girls' },
+  
+  // Baby Subcategories
+  { name: 'Baby Bodysuits', slug: 'baby-bodysuits', parent: 'kids-baby' },
+  { name: 'Baby Sets', slug: 'baby-sets', parent: 'kids-baby' },
+  { name: 'Baby Shoes', slug: 'baby-shoes', parent: 'kids-baby' },
+];
+
+export const productsData = [
+  // Men's T-Shirts
+  {
+    name: 'Classic Cotton Tee',
+    slug: 'classic-cotton-tee-black',
+    description: 'Comfortable everyday t-shirt made from 100% organic cotton. Perfect for casual wear with a relaxed fit.',
+    price: 29.99,
+    compareAtPrice: 39.99,
+    sku: 'MCT-BLK-001',
+    stock: 150,
+    category: 'men-t-shirts',
+    images: ['/products/men-tshirt-black-1.jpg', '/products/men-tshirt-black-2.jpg'],
+    tags: ['men', 'casual', 'cotton', 'basics'],
+    isFeatured: true,
+    specifications: {
+      material: '100% Organic Cotton',
+      fit: 'Regular',
+      care: 'Machine wash cold',
+      origin: 'USA',
+    },
+  },
+  {
+    name: 'Graphic Print Tee',
+    slug: 'graphic-print-tee-white',
+    description: 'Stand out with this bold graphic tee. Soft, breathable fabric with eye-catching design.',
+    price: 34.99,
+    sku: 'MGT-WHT-001',
+    stock: 120,
+    category: 'men-t-shirts',
+    images: ['/products/men-tshirt-graphic-1.jpg'],
+    tags: ['men', 'graphic', 'casual'],
+    isFeatured: true,
+  },
+  {
+    name: 'V-Neck Essential Tee',
+    slug: 'v-neck-essential-tee-navy',
+    description: 'Versatile v-neck tee in navy. Perfect for layering or wearing alone.',
+    price: 27.99,
+    sku: 'MVT-NVY-001',
+    stock: 200,
+    category: 'men-t-shirts',
+    images: ['/products/men-tshirt-vneck-navy.jpg'],
+    tags: ['men', 'basics', 'vneck'],
+  },
+
+  // Men's Hoodies
+  {
+    name: 'Premium Zip Hoodie',
+    slug: 'premium-zip-hoodie-gray',
+    description: 'Cozy fleece-lined hoodie with full zip closure. Features kangaroo pockets and adjustable hood.',
+    price: 79.99,
+    compareAtPrice: 99.99,
+    sku: 'MHZ-GRY-001',
+    stock: 85,
+    category: 'men-hoodies',
+    images: ['/products/men-hoodie-zip-gray.jpg'],
+    tags: ['men', 'hoodie', 'winter', 'warm'],
+    isFeatured: true,
+    specifications: {
+      material: '80% Cotton, 20% Polyester',
+      weight: 'Medium-weight',
+      features: 'Full zip, Kangaroo pocket',
+    },
+  },
+  {
+    name: 'Pullover Hoodie',
+    slug: 'pullover-hoodie-black',
+    description: 'Classic pullover hoodie in black. Soft interior with ribbed cuffs and hem.',
+    price: 69.99,
+    sku: 'MHP-BLK-001',
+    stock: 110,
+    category: 'men-hoodies',
+    images: ['/products/men-hoodie-pullover-black.jpg'],
+    tags: ['men', 'hoodie', 'pullover'],
+    isFeatured: true,
+  },
+
+  // Men's Sneakers
+  {
+    name: 'Urban Runner Sneakers',
+    slug: 'urban-runner-sneakers-white',
+    description: 'Lightweight running-inspired sneakers with breathable mesh upper and cushioned sole.',
+    price: 89.99,
+    sku: 'MSR-WHT-001',
+    stock: 75,
+    category: 'men-sneakers',
+    images: ['/products/men-sneakers-runner-white.jpg'],
+    tags: ['men', 'shoes', 'sneakers', 'athletic'],
+    isFeatured: true,
+    specifications: {
+      upper: 'Mesh and synthetic',
+      sole: 'Rubber',
+      cushioning: 'EVA foam',
+    },
+  },
+  {
+    name: 'Classic Court Sneakers',
+    slug: 'classic-court-sneakers-black',
+    description: 'Timeless court-style sneakers in black. Versatile design goes with everything.',
+    price: 79.99,
+    sku: 'MSC-BLK-001',
+    stock: 95,
+    category: 'men-sneakers',
+    images: ['/products/men-sneakers-court-black.jpg'],
+    tags: ['men', 'shoes', 'sneakers', 'classic'],
+    isFeatured: true,
+  },
+
+  // Women's Dresses
+  {
+    name: 'Floral Midi Dress',
+    slug: 'floral-midi-dress-pink',
+    description: 'Elegant midi dress with beautiful floral pattern. Perfect for spring and summer occasions.',
+    price: 89.99,
+    compareAtPrice: 119.99,
+    sku: 'WDF-PNK-001',
+    stock: 60,
+    category: 'women-dresses',
+    images: ['/products/women-dress-floral-midi.jpg'],
+    tags: ['women', 'dress', 'floral', 'midi'],
+    isFeatured: true,
+    specifications: {
+      length: 'Midi',
+      material: '100% Rayon',
+      occasion: 'Casual, Semi-formal',
+    },
+  },
+  {
+    name: 'Little Black Dress',
+    slug: 'little-black-dress-classic',
+    description: 'The essential little black dress. Timeless silhouette that works for any occasion.',
+    price: 99.99,
+    sku: 'WDL-BLK-001',
+    stock: 80,
+    category: 'women-dresses',
+    images: ['/products/women-dress-black-classic.jpg'],
+    tags: ['women', 'dress', 'formal', 'classic'],
+    isFeatured: true,
+  },
+  {
+    name: 'Summer Maxi Dress',
+    slug: 'summer-maxi-dress-blue',
+    description: 'Flowing maxi dress in ocean blue. Lightweight and breezy for warm weather.',
+    price: 79.99,
+    sku: 'WDM-BLU-001',
+    stock: 70,
+    category: 'women-dresses',
+    images: ['/products/women-dress-maxi-blue.jpg'],
+    tags: ['women', 'dress', 'maxi', 'summer'],
+  },
+
+  // Women's Sneakers
+  {
+    name: 'Women\'s Running Shoes',
+    slug: 'womens-running-shoes-purple',
+    description: 'High-performance running shoes with superior cushioning and support.',
+    price: 94.99,
+    sku: 'WSR-PUR-001',
+    stock: 65,
+    category: 'women-sneakers',
+    images: ['/products/women-sneakers-running-purple.jpg'],
+    tags: ['women', 'shoes', 'running', 'athletic'],
+    isFeatured: true,
+    specifications: {
+      support: 'Neutral',
+      cushioning: 'High',
+      weight: 'Lightweight',
+    },
+  },
+  {
+    name: 'Casual Canvas Sneakers',
+    slug: 'casual-canvas-sneakers-white',
+    description: 'Classic canvas sneakers in crisp white. Comfortable and versatile.',
+    price: 59.99,
+    sku: 'WSC-WHT-001',
+    stock: 120,
+    category: 'women-sneakers',
+    images: ['/products/women-sneakers-canvas-white.jpg'],
+    tags: ['women', 'shoes', 'casual', 'canvas'],
+    isFeatured: true,
+  },
+
+  // Women's Tops
+  {
+    name: 'Silk Blouse',
+    slug: 'silk-blouse-cream',
+    description: 'Luxurious silk blouse in cream. Perfect for office or evening wear.',
+    price: 89.99,
+    sku: 'WTS-CRM-001',
+    stock: 50,
+    category: 'women-tops',
+    images: ['/products/women-top-silk-cream.jpg'],
+    tags: ['women', 'blouse', 'silk', 'elegant'],
+  },
+  {
+    name: 'Casual Tank Top',
+    slug: 'casual-tank-top-black',
+    description: 'Essential tank top in black. Soft, stretchy fabric for all-day comfort.',
+    price: 24.99,
+    sku: 'WTT-BLK-001',
+    stock: 150,
+    category: 'women-tops',
+    images: ['/products/women-top-tank-black.jpg'],
+    tags: ['women', 'tank', 'basics', 'casual'],
+  },
+
+  // Women's Boots
+  {
+    name: 'Ankle Boots',
+    slug: 'ankle-boots-brown',
+    description: 'Stylish ankle boots in rich brown leather. Perfect for fall and winter.',
+    price: 129.99,
+    compareAtPrice: 159.99,
+    sku: 'WBA-BRN-001',
+    stock: 45,
+    category: 'women-boots',
+    images: ['/products/women-boots-ankle-brown.jpg'],
+    tags: ['women', 'boots', 'ankle', 'leather'],
+    isFeatured: true,
+    specifications: {
+      material: 'Genuine leather',
+      heel: '2 inch',
+      shaft: 'Ankle height',
+    },
+  },
+  {
+    name: 'Knee-High Boots',
+    slug: 'knee-high-boots-black',
+    description: 'Elegant knee-high boots in black. Classic style that never goes out of fashion.',
+    price: 179.99,
+    sku: 'WBK-BLK-001',
+    stock: 35,
+    category: 'women-boots',
+    images: ['/products/women-boots-knee-black.jpg'],
+    tags: ['women', 'boots', 'knee-high', 'leather'],
+  },
+
+  // Kids' Items
+  {
+    name: 'Boys Graphic Tee',
+    slug: 'boys-graphic-tee-blue',
+    description: 'Fun graphic t-shirt for boys. Durable and comfortable for active play.',
+    price: 19.99,
+    sku: 'KBT-BLU-001',
+    stock: 100,
+    category: 'boys-t-shirts',
+    images: ['/products/kids-boys-tee-blue.jpg'],
+    tags: ['kids', 'boys', 'tshirt', 'casual'],
+  },
+  {
+    name: 'Boys Joggers',
+    slug: 'boys-joggers-gray',
+    description: 'Comfortable joggers for boys. Elastic waistband and ribbed cuffs.',
+    price: 34.99,
+    sku: 'KBP-GRY-001',
+    stock: 80,
+    category: 'boys-pants',
+    images: ['/products/kids-boys-joggers-gray.jpg'],
+    tags: ['kids', 'boys', 'pants', 'joggers'],
+  },
+  {
+    name: 'Girls Floral Dress',
+    slug: 'girls-floral-dress-pink',
+    description: 'Adorable floral dress for girls. Perfect for parties and special occasions.',
+    price: 44.99,
+    sku: 'KGD-PNK-001',
+    stock: 60,
+    category: 'girls-dresses',
+    images: ['/products/kids-girls-dress-floral.jpg'],
+    tags: ['kids', 'girls', 'dress', 'floral'],
+    isFeatured: true,
+  },
+  {
+    name: 'Girls Leggings Set',
+    slug: 'girls-leggings-set-purple',
+    description: 'Matching top and leggings set for girls. Soft and stretchy.',
+    price: 29.99,
+    sku: 'KGT-PUR-001',
+    stock: 90,
+    category: 'girls-tops',
+    images: ['/products/kids-girls-leggings-purple.jpg'],
+    tags: ['kids', 'girls', 'leggings', 'set'],
+  },
+  {
+    name: 'Baby Bodysuit 3-Pack',
+    slug: 'baby-bodysuit-3pack-white',
+    description: 'Essential bodysuit 3-pack in white. Soft cotton for sensitive skin.',
+    price: 24.99,
+    sku: 'KBB-WHT-3PK',
+    stock: 120,
+    category: 'baby-bodysuits',
+    images: ['/products/kids-baby-bodysuit-white.jpg'],
+    tags: ['kids', 'baby', 'bodysuit', 'essentials'],
+  },
+  {
+    name: 'Baby Sneakers',
+    slug: 'baby-sneakers-blue',
+    description: 'Cute first sneakers for babies. Soft sole for developing feet.',
+    price: 34.99,
+    sku: 'KBS-BLU-001',
+    stock: 75,
+    category: 'baby-shoes',
+    images: ['/products/kids-baby-sneakers-blue.jpg'],
+    tags: ['kids', 'baby', 'shoes', 'sneakers'],
+  },
+
+  // Accessories
+  {
+    name: 'Leather Backpack',
+    slug: 'leather-backpack-brown',
+    description: 'Premium leather backpack with laptop compartment. Perfect for work or travel.',
+    price: 149.99,
+    compareAtPrice: 199.99,
+    sku: 'MAB-BRN-001',
+    stock: 40,
+    category: 'men-bags',
+    images: ['/products/men-bag-backpack-brown.jpg'],
+    tags: ['men', 'bag', 'backpack', 'leather'],
+    isFeatured: true,
+    specifications: {
+      material: 'Genuine leather',
+      capacity: '20L',
+      features: 'Laptop sleeve, Multiple pockets',
+    },
+  },
+  {
+    name: 'Baseball Cap',
+    slug: 'baseball-cap-black',
+    description: 'Classic baseball cap in black. Adjustable strap for perfect fit.',
+    price: 24.99,
+    sku: 'MAH-BLK-001',
+    stock: 150,
+    category: 'men-hats',
+    images: ['/products/men-hat-baseball-black.jpg'],
+    tags: ['men', 'hat', 'cap', 'casual'],
+  },
+  {
+    name: 'Women\'s Tote Bag',
+    slug: 'womens-tote-bag-tan',
+    description: 'Spacious tote bag in tan. Perfect for everyday use or shopping.',
+    price: 79.99,
+    sku: 'WAB-TAN-001',
+    stock: 65,
+    category: 'women-bags',
+    images: ['/products/women-bag-tote-tan.jpg'],
+    tags: ['women', 'bag', 'tote', 'leather'],
+    isFeatured: true,
+  },
+  {
+    name: 'Sunglasses',
+    slug: 'womens-sunglasses-black',
+    description: 'Chic sunglasses with UV protection. Classic cat-eye frame.',
+    price: 59.99,
+    sku: 'WAS-BLK-001',
+    stock: 90,
+    category: 'women-sunglasses',
+    images: ['/products/women-sunglasses-black.jpg'],
+    tags: ['women', 'sunglasses', 'accessories'],
+  },
+  {
+    name: 'Gold Chain Necklace',
+    slug: 'gold-chain-necklace',
+    description: 'Delicate gold chain necklace. Perfect layering piece.',
+    price: 49.99,
+    sku: 'WAJ-GLD-001',
+    stock: 100,
+    category: 'women-jewelry',
+    images: ['/products/women-jewelry-necklace-gold.jpg'],
+    tags: ['women', 'jewelry', 'necklace', 'gold'],
+  },
+];
+
+// Product variants (sizes, colors, etc.)
+export const variantsData = [
+  // Classic Cotton Tee variants
+  { productSku: 'MCT-BLK-001', name: 'Size: Small', sku: 'MCT-BLK-001-S', attributes: { size: 'S' }, stock: 30 },
+  { productSku: 'MCT-BLK-001', name: 'Size: Medium', sku: 'MCT-BLK-001-M', attributes: { size: 'M' }, stock: 40 },
+  { productSku: 'MCT-BLK-001', name: 'Size: Large', sku: 'MCT-BLK-001-L', attributes: { size: 'L' }, stock: 50 },
+  { productSku: 'MCT-BLK-001', name: 'Size: XL', sku: 'MCT-BLK-001-XL', attributes: { size: 'XL' }, stock: 30 },
+
+  // Floral Midi Dress variants
+  { productSku: 'WDF-PNK-001', name: 'Size: XS', sku: 'WDF-PNK-001-XS', attributes: { size: 'XS' }, stock: 10 },
+  { productSku: 'WDF-PNK-001', name: 'Size: Small', sku: 'WDF-PNK-001-S', attributes: { size: 'S' }, stock: 15 },
+  { productSku: 'WDF-PNK-001', name: 'Size: Medium', sku: 'WDF-PNK-001-M', attributes: { size: 'M' }, stock: 20 },
+  { productSku: 'WDF-PNK-001', name: 'Size: Large', sku: 'WDF-PNK-001-L', attributes: { size: 'L' }, stock: 15 },
+
+  // Urban Runner Sneakers variants
+  { productSku: 'MSR-WHT-001', name: 'Size: 8', sku: 'MSR-WHT-001-8', attributes: { size: '8' }, stock: 10 },
+  { productSku: 'MSR-WHT-001', name: 'Size: 9', sku: 'MSR-WHT-001-9', attributes: { size: '9' }, stock: 15 },
+  { productSku: 'MSR-WHT-001', name: 'Size: 10', sku: 'MSR-WHT-001-10', attributes: { size: '10' }, stock: 20 },
+  { productSku: 'MSR-WHT-001', name: 'Size: 11', sku: 'MSR-WHT-001-11', attributes: { size: '11' }, stock: 15 },
+  { productSku: 'MSR-WHT-001', name: 'Size: 12', sku: 'MSR-WHT-001-12', attributes: { size: '12' }, stock: 15 },
+
+  // Women's Running Shoes variants
+  { productSku: 'WSR-PUR-001', name: 'Size: 6', sku: 'WSR-PUR-001-6', attributes: { size: '6' }, stock: 10 },
+  { productSku: 'WSR-PUR-001', name: 'Size: 7', sku: 'WSR-PUR-001-7', attributes: { size: '7' }, stock: 15 },
+  { productSku: 'WSR-PUR-001', name: 'Size: 8', sku: 'WSR-PUR-001-8', attributes: { size: '8' }, stock: 20 },
+  { productSku: 'WSR-PUR-001', name: 'Size: 9', sku: 'WSR-PUR-001-9', attributes: { size: '9' }, stock: 15 },
+  { productSku: 'WSR-PUR-001', name: 'Size: 10', sku: 'WSR-PUR-001-10', attributes: { size: '10' }, stock: 5 },
+];

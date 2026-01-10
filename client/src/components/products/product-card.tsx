@@ -1,28 +1,29 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import { ShoppingBag } from 'lucide-react';
-import type { Product } from '@/types';
-import { formatPrice } from '@/lib/utils';
-import { ROUTES } from '@/lib/constants';
-import { Badge } from '@/components/ui';
+import Image from "next/image";
+import Link from "next/link";
+import { ShoppingBag } from "lucide-react";
+import type { Product } from "@/types";
+import { formatPrice } from "@/lib/utils";
+import { ROUTES } from "@/lib/constants";
+import { Badge } from "@/components/ui";
 
 interface ProductCardProps {
   product: Product;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
-  const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
+  const hasDiscount =
+    product.compareAtPrice && product.compareAtPrice > product.price;
   const discountPercentage = hasDiscount
-    ? Math.round(((product.compareAtPrice! - product.price) / product.compareAtPrice!) * 100)
+    ? Math.round(
+        ((product.compareAtPrice! - product.price) / product.compareAtPrice!) *
+          100
+      )
     : 0;
 
   return (
-    <Link
-      href={ROUTES.PRODUCT(product.slug)}
-      className="group block"
-    >
+    <Link href={ROUTES.PRODUCT(product.slug)} className="group block">
       {/* Image Container */}
-      <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-100">
+      <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-100 shadow-md">
         {product.images[0] ? (
           <Image
             src={product.images[0]}
@@ -39,15 +40,11 @@ export function ProductCard({ product }: ProductCardProps) {
 
         {/* Badges */}
         <div className="absolute left-3 top-3 flex flex-col gap-2">
-          {hasDiscount && (
-            <Badge variant="error">-{discountPercentage}%</Badge>
-          )}
+          {hasDiscount && <Badge variant="error">-{discountPercentage}%</Badge>}
           {product.stock <= 5 && product.stock > 0 && (
             <Badge variant="warning">Low stock</Badge>
           )}
-          {product.stock === 0 && (
-            <Badge variant="default">Out of stock</Badge>
-          )}
+          {product.stock === 0 && <Badge variant="default">Out of stock</Badge>}
         </div>
       </div>
 
@@ -56,7 +53,7 @@ export function ProductCard({ product }: ProductCardProps) {
         <h3 className="text-sm font-medium text-gray-900 group-hover:text-gray-600 transition-colors line-clamp-2">
           {product.name}
         </h3>
-        
+
         <div className="mt-1 flex items-center gap-2">
           <span className="text-sm font-semibold text-gray-900">
             {formatPrice(product.price)}

@@ -79,12 +79,12 @@ export function Header() {
             {/* Cart */}
             <button
               onClick={openCart}
-              className="relative text-gray-700 hover:text-primary-600 transition-colors"
+              className="relative cursor-pointer text-gray-700 hover:text-primary-600 transition-colors"
               aria-label="Shopping cart"
             >
-              <ShoppingCart className="h-6 w-6" />
+              <ShoppingCart className="h-6 w-6 pointer-events-none" />
               {itemCount > 0 && (
-                <span className="text-label-sm absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary-600 text-white">
+                <span className="text-label-sm absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-primary-600 text-white pointer-events-none">
                   {itemCount > 9 ? "9+" : itemCount}
                 </span>
               )}
