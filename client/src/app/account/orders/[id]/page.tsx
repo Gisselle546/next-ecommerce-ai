@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
+import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { Container, Card, Badge } from "@/components/ui";
 import { ROUTES } from "@/lib/constants";
 
@@ -51,7 +52,11 @@ export default async function OrderPage({ params }: OrderPageProps) {
         <div className="divide-y divide-gray-200">
           {[1, 2, 3].map((item) => (
             <div key={item} className="flex items-center gap-4 px-6 py-4">
-              <div className="h-16 w-16 rounded-lg bg-gray-100" />
+              <div className="relative h-16 w-16 rounded-lg bg-gray-100 overflow-hidden shrink-0">
+                <div className="flex h-full items-center justify-center">
+                  <ShoppingBag className="h-6 w-6 text-gray-300" />
+                </div>
+              </div>
               <div className="flex-1">
                 <p className="font-medium text-gray-900">Product Name {item}</p>
                 <p className="text-sm text-gray-500">Qty: 1</p>

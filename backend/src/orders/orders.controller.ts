@@ -45,6 +45,29 @@ export class OrdersController {
     return this.ordersService.create(userId, createOrderDto);
   }
 
+  @Post(':id/payment-intent')
+  @ApiOperation({ summary: 'Create payment intent for order' })
+  @ApiResponse({ status: 200, description: 'Payment intent created' })
+  @ApiResponse({ status: 404, description: 'Order not found' })
+  createPaymentIntent(
+    @CurrentUser('id') userId: string,
+    @Param('id') id: string,
+  ) {
+    return this.ordersService.createPaymentIntent(id, userId);
+  }
+
+  @Post(':id/confirm-payment')
+  @ApiOperation({ summary: 'Confirm payment for order' })
+  @ApiResponse({ status: 200, description: 'Payment confirmed' })
+  @ApiResponse({ status: 400, description: 'Payment failed' })
+  confirmPayment(
+    @CurrentUser('id') userId: string,
+    @Param('id') id: string,
+    @Body() body: { paymentIntentId: string },
+  ) {
+    return this.ordersService.confirmPayment(id, userId, body.paymentIntentId);
+  }
+
   @Get()
   @ApiOperation({ summary: 'Get user orders' })
   @ApiResponse({ status: 200, description: 'Orders retrieved' })

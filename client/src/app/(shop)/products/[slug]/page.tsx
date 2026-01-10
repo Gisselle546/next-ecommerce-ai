@@ -15,7 +15,9 @@ interface ProductPageProps {
 export default function ProductPage({ params }: ProductPageProps) {
   const [slug, setSlug] = React.useState<string>("");
   const [quantity, setQuantity] = React.useState(1);
-  const [selectedVariant, setSelectedVariant] = React.useState<string | null>(null);
+  const [selectedVariant, setSelectedVariant] = React.useState<string | null>(
+    null
+  );
 
   React.useEffect(() => {
     params.then((p) => setSlug(p.slug));
@@ -88,8 +90,15 @@ export default function ProductPage({ params }: ProductPageProps) {
           {product.images && product.images.length > 1 && (
             <div className="mt-4 flex gap-2">
               {product.images.slice(1, 5).map((img, i) => (
-                <div key={i} className="h-20 w-20 overflow-hidden rounded-lg bg-gray-100">
-                  <img src={img} alt={`${product.name} ${i + 2}`} className="h-full w-full object-cover" />
+                <div
+                  key={i}
+                  className="h-20 w-20 overflow-hidden rounded-lg bg-gray-100"
+                >
+                  <img
+                    src={img}
+                    alt={`${product.name} ${i + 2}`}
+                    className="h-full w-full object-cover"
+                  />
                 </div>
               ))}
             </div>
@@ -109,7 +118,10 @@ export default function ProductPage({ params }: ProductPageProps) {
               {product.category && (
                 <>
                   <li>
-                    <Link href={`/categories/${product.category.slug}`} className="hover:text-gray-900">
+                    <Link
+                      href={`/categories/${product.category.slug}`}
+                      className="hover:text-gray-900"
+                    >
                       {product.category.name}
                     </Link>
                   </li>
@@ -128,38 +140,57 @@ export default function ProductPage({ params }: ProductPageProps) {
               {[1, 2, 3, 4, 5].map((star) => (
                 <span
                   key={star}
-                  className={star <= Math.round(Number(product.averageRating) || 0) ? "text-yellow-400" : "text-gray-300"}
+                  className={
+                    star <= Math.round(Number(product.averageRating) || 0)
+                      ? "text-yellow-400"
+                      : "text-gray-300"
+                  }
                 >
                   ★
                 </span>
               ))}
             </div>
             <span className="text-sm text-gray-600">
-              ({(Number(product.averageRating) || 0).toFixed(1)} · {Number(product.reviewCount) || 0} reviews)
+              ({(Number(product.averageRating) || 0).toFixed(1)} ·{" "}
+              {Number(product.reviewCount) || 0} reviews)
             </span>
           </div>
 
           {/* Price */}
           <div className="mt-6">
-            <span className="text-3xl font-bold text-gray-900">${Number(product.price).toFixed(2)}</span>
-            {product.compareAtPrice && Number(product.compareAtPrice) > Number(product.price) && (
-              <>
-                <span className="ml-2 text-lg text-gray-500 line-through">
-                  ${Number(product.compareAtPrice).toFixed(2)}
-                </span>
-                <span className="ml-2 rounded bg-red-100 px-2 py-0.5 text-sm font-medium text-red-800">
-                  -{Math.round(((Number(product.compareAtPrice) - Number(product.price)) / Number(product.compareAtPrice)) * 100)}%
-                </span>
-              </>
-            )}
+            <span className="text-3xl font-bold text-gray-900">
+              ${Number(product.price).toFixed(2)}
+            </span>
+            {product.compareAtPrice &&
+              Number(product.compareAtPrice) > Number(product.price) && (
+                <>
+                  <span className="ml-2 text-lg text-gray-500 line-through">
+                    ${Number(product.compareAtPrice).toFixed(2)}
+                  </span>
+                  <span className="ml-2 rounded bg-red-100 px-2 py-0.5 text-sm font-medium text-red-800">
+                    -
+                    {Math.round(
+                      ((Number(product.compareAtPrice) -
+                        Number(product.price)) /
+                        Number(product.compareAtPrice)) *
+                        100
+                    )}
+                    %
+                  </span>
+                </>
+              )}
           </div>
 
           {/* Stock Status */}
           <div className="mt-4">
             {Number(product.stock) > 0 ? (
-              <span className="text-sm font-medium text-green-600">In Stock ({Number(product.stock)} available)</span>
+              <span className="text-sm font-medium text-green-600">
+                In Stock ({Number(product.stock)} available)
+              </span>
             ) : (
-              <span className="text-sm font-medium text-red-600">Out of Stock</span>
+              <span className="text-sm font-medium text-red-600">
+                Out of Stock
+              </span>
             )}
           </div>
 
@@ -170,7 +201,11 @@ export default function ProductPage({ params }: ProductPageProps) {
           {product.variants && product.variants.length > 0 && (
             <div className="mt-6">
               <h3 className="text-sm font-medium text-gray-900 mb-3">
-                Size: <span className="text-gray-600">{product.variants.find(v => v.id === selectedVariant)?.name || 'Select a size'}</span>
+                Size:{" "}
+                <span className="text-gray-600">
+                  {product.variants.find((v) => v.id === selectedVariant)
+                    ?.name || "Select a size"}
+                </span>
               </h3>
               <div className="flex flex-wrap gap-2">
                 {product.variants.map((variant) => (
@@ -179,15 +214,17 @@ export default function ProductPage({ params }: ProductPageProps) {
                     onClick={() => setSelectedVariant(variant.id)}
                     className={`rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
                       selectedVariant === variant.id
-                        ? 'border-black bg-black text-white'
-                        : 'border-gray-300 text-gray-900 hover:border-black'
+                        ? "border-black bg-black text-white"
+                        : "border-gray-300 text-gray-900 hover:border-black"
                     } ${
-                      variant.stock === 0 ? 'opacity-50 cursor-not-allowed' : ''
+                      variant.stock === 0 ? "opacity-50 cursor-not-allowed" : ""
                     }`}
                     disabled={variant.stock === 0}
                   >
                     {variant.name}
-                    {variant.stock === 0 && <span className="ml-1 text-xs">(Out of stock)</span>}
+                    {variant.stock === 0 && (
+                      <span className="ml-1 text-xs">(Out of stock)</span>
+                    )}
                   </button>
                 ))}
               </div>
@@ -205,9 +242,13 @@ export default function ProductPage({ params }: ProductPageProps) {
                 >
                   -
                 </button>
-                <span className="px-4 py-2 font-medium text-gray-900">{quantity}</span>
+                <span className="px-4 py-2 font-medium text-gray-900">
+                  {quantity}
+                </span>
                 <button
-                  onClick={() => setQuantity(Math.min(Number(product.stock), quantity + 1))}
+                  onClick={() =>
+                    setQuantity(Math.min(Number(product.stock), quantity + 1))
+                  }
                   className="px-4 py-2 text-gray-600 hover:bg-gray-50"
                   disabled={quantity >= Number(product.stock)}
                 >
@@ -217,27 +258,41 @@ export default function ProductPage({ params }: ProductPageProps) {
               <button
                 onClick={async () => {
                   try {
-                    console.log('Adding to cart:', {
+                    console.log("Adding to cart:", {
                       productId: product.id,
                       variantId: selectedVariant,
                       quantity,
                     });
-                    
+
                     await addItem({
                       productId: product.id,
                       variantId: selectedVariant || undefined,
                       quantity,
                     });
-                    
-                    console.log('Successfully added to cart');
+
+                    console.log("Successfully added to cart");
                   } catch (error) {
-                    console.error('Failed to add to cart:', error);
+                    console.error("Failed to add to cart:", error);
                   }
                 }}
-                disabled={Number(product.stock) === 0 || isAdding || (product.variants && product.variants.length > 0 && !selectedVariant)}
+                disabled={
+                  Number(product.stock) === 0 ||
+                  isAdding ||
+                  (product.variants &&
+                    product.variants.length > 0 &&
+                    !selectedVariant)
+                }
                 className="flex-1 rounded-lg bg-black px-6 py-3 text-base font-medium text-white hover:bg-gray-800 disabled:bg-gray-300 disabled:cursor-not-allowed"
               >
-                {isAdding ? "Adding..." : (product.variants && product.variants.length > 0 && !selectedVariant) ? "Select a size" : Number(product.stock) > 0 ? "Add to Cart" : "Out of Stock"}
+                {isAdding
+                  ? "Adding..."
+                  : product.variants &&
+                    product.variants.length > 0 &&
+                    !selectedVariant
+                  ? "Select a size"
+                  : Number(product.stock) > 0
+                  ? "Add to Cart"
+                  : "Out of Stock"}
               </button>
             </div>
           </div>
@@ -257,7 +312,9 @@ export default function ProductPage({ params }: ProductPageProps) {
       {/* Related Products */}
       {relatedProducts && relatedProducts.length > 0 && (
         <section className="mt-16">
-          <h2 className="text-2xl font-bold text-gray-900">You may also like</h2>
+          <h2 className="text-2xl font-bold text-gray-900">
+            You may also like
+          </h2>
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4 lg:gap-6">
             {relatedProducts.map((relatedProduct) => (
               <ProductCard key={relatedProduct.id} product={relatedProduct} />

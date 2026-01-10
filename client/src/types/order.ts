@@ -52,9 +52,11 @@ export interface Order {
 }
 
 export interface CreateOrderRequest {
-  shippingAddress: ShippingAddress;
+  shippingAddressId?: string; // UUID reference (if using saved address)
+  shippingAddress?: ShippingAddress; // Or inline address data
   billingAddress?: ShippingAddress;
-  paymentMethodId: string;
+  paymentMethod?: string; // Optional: 'stripe', 'paypal', etc.
+  couponCode?: string;
   notes?: string;
 }
 

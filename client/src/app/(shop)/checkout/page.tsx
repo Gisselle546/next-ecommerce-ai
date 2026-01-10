@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Container } from "@/components/ui";
@@ -8,8 +8,9 @@ import { useCart } from "@/hooks";
 import { useAuthStore } from "@/stores";
 import { ordersApi } from "@/lib/api";
 import { formatPrice } from "@/lib/utils";
+import StripePaymentForm from "@/components/checkout/stripe-payment-form";
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { items, subtotal, tax, shipping, total, isLoading } = useCart();
@@ -17,14 +18,22 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = React.useState(false);
   const [isFetchingAddress, setIsFetchingAddress] = React.useState(true);
   const [hasPrefilledAddress, setHasPrefilledAddress] = React.useState(false);
+  const [showPaymentForm, setShowPaymentForm] = React.useState(false);
+  const [paymentData, setPaymentData] = React.useState<{
+    clientSecret: string;
+    orderId: string;
+    paymentIntentId: string;
+  } | null>(null);
   const [formData, setFormData] = React.useState({
     email: "",
     firstName: "",
     lastName: "",
     address: "",
     city: "",
+    state: "",
     postalCode: "",
     country: "United States",
+    phone: "",
   });
 
   // Redirect to login if not authenticated
@@ -57,8 +66,10 @@ export default function CheckoutPage() {
             lastName: addr.lastName || "",
             address: addr.address1 || "",
             city: addr.city || "",
+            state: addr.state || "",
             postalCode: addr.postalCode || "",
             country: addr.country || "United States",
+            phone: addr.phone || "",
           });
           setHasPrefilledAddress(true);
         } else {
@@ -100,19 +111,67 @@ export default function CheckoutPage() {
     e.preventDefault();
     setIsProcessing(true);
     
-    // TODO: Integrate with orders API
     try {
-      // Simulate order processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Redirect to success page
-      router.push("/checkout/success");
+      // Step 1: Create order
+      const orderResponse = await ordersApi.create({
+        shippingAddress: {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          address1: formData.address,
+          city: formData.city,
+          state: formData.state,
+          postalCode: formData.postalCode,
+          country: formData.country,
+          phone: formData.phone,
+        },
+      });
+
+      // Step 2: Create payment intent
+      const { clientSecret, paymentIntentId } = await ordersApi.getPaymentIntent(
+        orderResponse.id
+      );
+
+      // Step 3: Show Stripe payment form
+      setPaymentData({
+        clientSecret,
+        orderId: orderResponse.id,
+        paymentIntentId,
+      });
+      setShowPaymentForm(true);
+      setIsProcessing(false);
     } catch (error) {
       console.error("Checkout failed:", error);
-      alert("Failed to complete order. Please try again.");
-    } finally {
+      alert("Failed to create order. Please try again.");
       setIsProcessing(false);
     }
+  };
+
+  const handlePaymentSuccess = async () => {
+    if (!paymentData) return;
+
+    try {
+      // Confirm payment with backend
+      const paymentResult = await ordersApi.confirmPayment(
+        paymentData.orderId,
+        paymentData.paymentIntentId
+      );
+
+      if (paymentResult.success) {
+        // Redirect to success page
+        router.push(`/checkout/success?orderId=${paymentData.orderId}`);
+      } else {
+        throw new Error("Payment confirmation failed");
+      }
+    } catch (error) {
+      console.error("Payment confirmation failed:", error);
+      alert("Payment confirmation failed. Please contact support.");
+    }
+  };
+
+  const handlePaymentError = (error: string) => {
+    alert(`Payment failed: ${error}`);
+    setShowPaymentForm(false);
+    setPaymentData(null);
   };
 
   if (isLoading || isFetchingAddress) {
@@ -256,6 +315,20 @@ export default function CheckoutPage() {
                 />
               </div>
               <div>
+                <label htmlFor="state" className="block text-sm font-medium text-gray-700">
+                  State / Province
+                </label>
+                <input
+                  type="text"
+                  id="state"
+                  name="state"
+                  required
+                  value={formData.state}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
+                />
+              </div>
+              <div>
                 <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700">
                   Postal code
                 </label>
@@ -287,6 +360,21 @@ export default function CheckoutPage() {
                   <option>United Kingdom</option>
                 </select>
               </div>
+              <div className="sm:col-span-2">
+                <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
+                  Phone number
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  required
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  className="mt-1 block w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-black focus:outline-none focus:ring-1 focus:ring-black"
+                  placeholder="(555) 123-4567"
+                />
+              </div>
             </div>
           </section>
 
@@ -317,7 +405,7 @@ export default function CheckoutPage() {
                 <div key={item.id} className="flex gap-4 py-4">
                   <div className="h-16 w-16 rounded-lg bg-gray-200 overflow-hidden">
                     {item.product.images && item.product.images.length > 0 ? (
-                      <img 
+                      <img
                         src={item.product.images[0]} 
                         alt={item.product.name}
                         className="h-full w-full object-cover"
@@ -370,23 +458,65 @@ export default function CheckoutPage() {
               </div>
             </dl>
 
-            <button 
-              type="submit"
-              disabled={isProcessing}
-              className="mt-6 w-full rounded-lg bg-black px-6 py-3 text-base font-medium text-white hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
-            >
-              {isProcessing ? "Processing..." : "Complete Order"}
-            </button>
-            
-            <Link
-              href="/products"
-              className="mt-4 block text-center text-sm text-gray-600 hover:text-gray-900"
-            >
-              Continue Shopping
-            </Link>
+            {!showPaymentForm ? (
+              <>
+                <button 
+                  type="submit"
+                  disabled={isProcessing}
+                  className="mt-6 w-full rounded-lg bg-black px-6 py-3 text-base font-medium text-white hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  {isProcessing ? "Processing..." : "Continue to Payment"}
+                </button>
+                
+                <Link
+                  href="/products"
+                  className="mt-4 block text-center text-sm text-gray-600 hover:text-gray-900"
+                >
+                  Continue Shopping
+                </Link>
+              </>
+            ) : null}
           </div>
         </div>
+
+        {/* Stripe Payment Form - Show after order creation */}
+        {showPaymentForm && paymentData && (
+          <div className="lg:col-span-12 mt-8">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
+              <h2 className="text-xl font-semibold mb-6">Payment Information</h2>
+              <StripePaymentForm
+                clientSecret={paymentData.clientSecret}
+                amount={cartTotal}
+                onSuccess={handlePaymentSuccess}
+                onError={handlePaymentError}
+              />
+            </div>
+          </div>
+        )}
       </form>
     </Container>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={
+      <Container className="py-8 md:py-12">
+        <div className="animate-pulse">
+          <div className="h-8 w-48 bg-gray-200 rounded mb-8" />
+          <div className="lg:grid lg:grid-cols-12 lg:gap-12">
+            <div className="lg:col-span-7 space-y-6">
+              <div className="h-64 bg-gray-100 rounded-xl" />
+              <div className="h-96 bg-gray-100 rounded-xl" />
+            </div>
+            <div className="lg:col-span-5">
+              <div className="h-96 bg-gray-100 rounded-xl" />
+            </div>
+          </div>
+        </div>
+      </Container>
+    }>
+      <CheckoutContent />
+    </Suspense>
   );
 }

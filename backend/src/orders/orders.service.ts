@@ -15,6 +15,7 @@ import { UpdateTrackingDto } from './dto/update-tracking.dto';
 import { PaginationQueryDto } from '../common/dto/pagination.dto';
 import { paginate } from '../common/helpers/pagination.helper';
 import { CartService } from '../cart/cart.service';
+import { PaymentsService } from '../payments/payments.service';
 
 @Injectable()
 export class OrdersService {
@@ -25,6 +26,7 @@ export class OrdersService {
     private orderItemsRepository: Repository<OrderItem>,
     private dataSource: DataSource,
     private cartService: CartService,
+    private paymentsService: PaymentsService,
     @InjectQueue('email') private emailQueue: Queue,
     @InjectQueue('order') private orderQueue: Queue,
   ) {}
@@ -42,16 +44,26 @@ export class OrdersService {
         throw new BadRequestException('Cart is empty');
       }
 
-      // TODO: Get shipping address from ShippingService
-      const shippingAddress = {
-        fullName: 'John Doe',
-        phone: '+1234567890',
-        addressLine1: '123 Main St',
-        city: 'New York',
-        state: 'NY',
-        postalCode: '10001',
-        country: 'US',
-      };
+      // Get shipping address from DTO or use saved address
+      let shippingAddress;
+      if (createOrderDto.shippingAddress) {
+        // Use inline shipping address from checkout form
+        shippingAddress = {
+          fullName: `${createOrderDto.shippingAddress.firstName} ${createOrderDto.shippingAddress.lastName}`,
+          phone: createOrderDto.shippingAddress.phone,
+          addressLine1: createOrderDto.shippingAddress.address1,
+          addressLine2: createOrderDto.shippingAddress.address2,
+          city: createOrderDto.shippingAddress.city,
+          state: createOrderDto.shippingAddress.state,
+          postalCode: createOrderDto.shippingAddress.postalCode,
+          country: createOrderDto.shippingAddress.country,
+        };
+      } else if (createOrderDto.shippingAddressId) {
+        // TODO: Fetch saved address from database
+        throw new BadRequestException('Saved addresses not yet implemented');
+      } else {
+        throw new BadRequestException('Shipping address is required');
+      }
 
       // Generate order number
       const orderNumber = this.generateOrderNumber();
@@ -255,6 +267,58 @@ export class OrdersService {
     // TODO: Process refund if payment completed
 
     return this.ordersRepository.save(order);
+  }
+
+  async createPaymentIntent(orderId: string, userId: string) {
+    const order = await this.findOneByUser(orderId, userId);
+
+    if (order.paymentStatus !== PaymentStatus.PENDING) {
+      throw new BadRequestException('Payment already processed');
+    }
+
+    const { clientSecret, paymentIntentId } =
+      await this.paymentsService.createPaymentIntent(order.total, 'usd', {
+        orderId: order.id,
+        orderNumber: order.orderNumber,
+        userId,
+      });
+
+    // Store payment intent ID in order
+    order.paymentIntentId = paymentIntentId;
+    await this.ordersRepository.save(order);
+
+    return { clientSecret, paymentIntentId };
+  }
+
+  async confirmPayment(
+    orderId: string,
+    userId: string,
+    paymentIntentId: string,
+  ) {
+    const order = await this.findOneByUser(orderId, userId);
+
+    if (order.paymentStatus !== PaymentStatus.PENDING) {
+      throw new BadRequestException('Payment already processed');
+    }
+
+    // Verify payment with Stripe (or mock)
+    const isSuccess =
+      await this.paymentsService.confirmPayment(paymentIntentId);
+
+    if (isSuccess) {
+      order.paymentStatus = PaymentStatus.COMPLETED;
+      order.status = OrderStatus.PROCESSING;
+      await this.ordersRepository.save(order);
+
+      // Clear cart after successful payment
+      await this.cartService.clearCart(userId);
+
+      return { success: true, order };
+    } else {
+      order.paymentStatus = PaymentStatus.FAILED;
+      await this.ordersRepository.save(order);
+      throw new BadRequestException('Payment failed');
+    }
   }
 
   private generateOrderNumber(): string {

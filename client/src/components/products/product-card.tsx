@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
 import type { Product } from "@/types";
@@ -24,13 +23,11 @@ export function ProductCard({ product }: ProductCardProps) {
     <Link href={ROUTES.PRODUCT(product.slug)} className="group block">
       {/* Image Container */}
       <div className="relative aspect-square overflow-hidden rounded-xl bg-gray-100 shadow-md">
-        {product.images[0] ? (
-          <Image
+        {product.images && product.images[0] ? (
+          <img
             src={product.images[0]}
             alt={product.name}
-            fill
-            className="object-cover transition-transform duration-300 group-hover:scale-105"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="flex h-full items-center justify-center">

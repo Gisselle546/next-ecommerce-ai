@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authApi } from "@/lib/api";
 import { useAuthStore } from "@/stores";
@@ -9,7 +9,6 @@ import type { LoginCredentials, RegisterCredentials } from "@/types";
 
 export function useAuth() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const { user, isAuthenticated, setUser, setTokens, clearAuth, setLoading } =
     useAuthStore();
@@ -31,8 +30,10 @@ export function useAuth() {
       setUser(data.user);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USER });
       
-      // Redirect to the specified URL or home
-      const redirectUrl = searchParams?.get('redirect') || ROUTES.HOME;
+      // Try to get redirect from URL, fallback to home
+      // Note: This will use the current URL at the time of login
+      const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+      const redirectUrl = urlParams?.get('redirect') || ROUTES.HOME;
       router.push(redirectUrl);
     },
   });
@@ -46,8 +47,9 @@ export function useAuth() {
       setUser(data.user);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USER });
       
-      // Redirect to the specified URL or home
-      const redirectUrl = searchParams?.get('redirect') || ROUTES.HOME;
+      // Try to get redirect from URL, fallback to home
+      const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+      const redirectUrl = urlParams?.get('redirect') || ROUTES.HOME;
       router.push(redirectUrl);
     },
   });

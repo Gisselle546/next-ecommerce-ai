@@ -33,21 +33,33 @@ export default function CategoriesPage() {
             <Link
               key={category.slug}
               href={`/categories/${category.slug}`}
-              className="group relative overflow-hidden rounded-xl border bg-white p-6 transition-all hover:border-gray-300 hover:shadow-lg"
+              className="group relative overflow-hidden rounded-xl border bg-white transition-all hover:border-gray-300 hover:shadow-lg"
               style={{ borderColor: "var(--color-primary-600)" }}
             >
-              {/* Placeholder for category image */}
-              <div className="mb-4 h-32 rounded-lg bg-gray-100" />
+              {/* Category image */}
+              <div className="relative h-48 bg-gray-100 overflow-hidden">
+                {category.image ? (
+                  <img
+                    src={category.image}
+                    alt={category.name}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="h-full w-full bg-gradient-to-br from-gray-200 to-gray-300" />
+                )}
+              </div>
 
-              <h2 className="text-lg font-semibold text-gray-900 group-hover:text-gray-600">
-                {category.name}
-              </h2>
-              <p className="mt-1 text-sm text-gray-600">
-                {category.description}
-              </p>
-              <p className="mt-3 text-sm font-medium text-gray-500">
-                {getCategoryProductCount(category.id)} products
-              </p>
+              <div className="p-6">
+                <h2 className="text-lg font-semibold text-gray-900 group-hover:text-gray-600">
+                  {category.name}
+                </h2>
+                <p className="mt-1 text-sm text-gray-600">
+                  {category.description}
+                </p>
+                <p className="mt-3 text-sm font-medium text-gray-500">
+                  {getCategoryProductCount(category.id)} products
+                </p>
+              </div>
             </Link>
           ))}
       </div>

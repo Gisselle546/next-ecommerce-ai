@@ -95,7 +95,7 @@ export function HeroCarousel() {
                 }}
               />
               {/* Overlay with text */}
-              <div className="absolute inset-0 bg-gradient-to-br from-black/40 to-transparent flex items-center justify-center">
+              <div className="absolute inset-0 bg-linear-to-br from-black/40 to-transparent flex items-center justify-center">
                 <div className="text-center text-white px-8">
                   <h2 className="text-display-lg mb-4 font-bold">
                     {slide.title}
@@ -148,7 +148,7 @@ export function HeroCarousel() {
                 }}
               />
               {/* Overlay with text */}
-              <div className="absolute inset-0 bg-gradient-to-bl from-black/40 to-transparent flex items-center justify-center">
+              <div className="absolute inset-0 bg-linear-to-bl from-black/40 to-transparent flex items-center justify-center">
                 <div className="text-center text-white px-8">
                   <h2 className="text-display-lg mb-4 font-bold">
                     {slide.title}

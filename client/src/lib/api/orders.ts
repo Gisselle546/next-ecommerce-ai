@@ -26,8 +26,18 @@ export const ordersApi = {
 
   getPaymentIntent: async (
     orderId: string
-  ): Promise<{ clientSecret: string }> => {
+  ): Promise<{ clientSecret: string; paymentIntentId: string }> => {
     const response = await apiClient.post(`/orders/${orderId}/payment-intent`);
+    return response.data;
+  },
+
+  confirmPayment: async (
+    orderId: string,
+    paymentIntentId: string
+  ): Promise<{ success: boolean; order: Order }> => {
+    const response = await apiClient.post(`/orders/${orderId}/confirm-payment`, {
+      paymentIntentId,
+    });
     return response.data;
   },
 };

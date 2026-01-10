@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheModule } from '@nestjs/cache-manager';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { BullModule } from '@nestjs/bullmq';
 import { APP_GUARD, APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import databaseConfig from './config/database.config';
 import redisConfig from './config/redis.config';
@@ -21,6 +22,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { CartModule } from './cart/cart.module';
 import { OrdersModule } from './orders/orders.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { PaymentsModule } from './payments/payments.module';
 
 @Module({
   imports: [
@@ -51,6 +53,17 @@ import { ReviewsModule } from './reviews/reviews.module';
       useFactory: (configService: ConfigService) => configService.get('redis'),
     }),
 
+    // BullMQ (Redis-backed queue)
+    BullModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        connection: {
+          host: configService.get('REDIS_HOST') || 'localhost',
+          port: configService.get('REDIS_PORT') || 6379,
+        },
+      }),
+    }),
+
     // Rate Limiting
     // Global default: 100 requests per minute (lenient for browsing)
     // Specific endpoints override this with stricter limits (auth, payments)
@@ -70,6 +83,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     CartModule,
     OrdersModule,
     ReviewsModule,
+    PaymentsModule,
   ],
   providers: [
     {

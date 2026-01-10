@@ -109,7 +109,16 @@ export default function HomePage() {
                   href={`/categories/${category.slug}`}
                   className="group relative aspect-square overflow-hidden rounded-xl bg-gray-200 hover:shadow-xl transition-shadow"
                 >
-                  <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent" />
+                  {category.image ? (
+                    <img
+                      src={category.image}
+                      alt={category.name}
+                      className="h-full w-full object-cover"
+                    />
+                  ) : (
+                    <div className="h-full w-full bg-gradient-to-br from-gray-300 to-gray-400" />
+                  )}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                   <div className="absolute bottom-4 left-4 right-4">
                     <h3 className="text-lg font-semibold text-white">
                       {category.name}

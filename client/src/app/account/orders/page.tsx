@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
+import { ShoppingBag } from "lucide-react";
 import { Card, Badge } from "@/components/ui";
 import { ROUTES } from "@/lib/constants";
 
