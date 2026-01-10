@@ -13,12 +13,12 @@ export const productsApi = {
   },
 
   getBySlug: async (slug: string): Promise<Product> => {
-    const response = await apiClient.get(`/products/${slug}`);
+    const response = await apiClient.get(`/products/slug/${slug}`);
     return response.data.data;
   },
 
   getById: async (id: string): Promise<Product> => {
-    const response = await apiClient.get(`/products/id/${id}`);
+    const response = await apiClient.get(`/products/${id}`);
     return response.data.data;
   },
 
@@ -51,7 +51,7 @@ export const categoriesApi = {
   },
 
   getBySlug: async (slug: string): Promise<Category> => {
-    const response = await apiClient.get(`/categories/${slug}`);
+    const response = await apiClient.get(`/categories/slug/${slug}`);
     return response.data.data;
   },
 
@@ -59,7 +59,7 @@ export const categoriesApi = {
     slug: string,
     filters?: ProductFilters
   ): Promise<{ category: Category; products: ProductsResponse }> => {
-    const response = await apiClient.get(`/categories/${slug}/products`, {
+    const response = await apiClient.get(`/categories/slug/${slug}/products`, {
       params: filters,
     });
     return response.data.data;

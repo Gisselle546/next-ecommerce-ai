@@ -172,7 +172,8 @@ export default function ProductsPage() {
                     setMinPrice(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                  className="w-full rounded-lg border px-3 py-2 text-sm  text-gray-900"
+                  style={{ borderColor: "var(--color-primary-600)" }}
                 />
                 <span className="text-gray-400">-</span>
                 <input
@@ -183,7 +184,8 @@ export default function ProductsPage() {
                     setMaxPrice(e.target.value);
                     setCurrentPage(1);
                   }}
-                  className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm"
+                  className="w-full rounded-lg border px-3 py-2 text-sm  text-gray-900"
+                  style={{ borderColor: "var(--color-primary-600)" }}
                 />
               </div>
             </div>
@@ -205,7 +207,8 @@ export default function ProductsPage() {
                 setSortBy(e.target.value);
                 setCurrentPage(1);
               }}
-              className="rounded-lg border shadow-sm px-3 py-2 text-sm"
+              className="rounded-lg border shadow-sm px-3 py-2 text-sm text-gray-900"
+              style={{ borderColor: "var(--color-primary-600)" }}
             >
               <option value="featured">Sort by: Featured</option>
               <option value="price-asc">Price: Low to High</option>

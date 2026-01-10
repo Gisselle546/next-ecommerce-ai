@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { useAuth } from '@/hooks';
 import { loginSchema, type LoginFormData } from '@/lib/validations';
 import { Button, Input } from '@/components/ui';
@@ -10,6 +11,8 @@ import { ROUTES } from '@/lib/constants';
 
 export function LoginForm() {
   const { login, loginMutation } = useAuth();
+  const searchParams = useSearchParams();
+  const redirectParam = searchParams.get('redirect');
 
   const {
     register,
@@ -85,7 +88,7 @@ export function LoginForm() {
       <p className="text-center text-sm text-gray-600">
         Don&apos;t have an account?{' '}
         <Link
-          href={ROUTES.REGISTER}
+          href={redirectParam ? `${ROUTES.REGISTER}?redirect=${redirectParam}` : ROUTES.REGISTER}
           className="font-medium text-gray-900 hover:underline"
         >
           Sign up

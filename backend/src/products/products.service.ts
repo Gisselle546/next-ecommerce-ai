@@ -69,9 +69,20 @@ export class ProductsService {
     }
 
     if (query.categoryId) {
-      qb.andWhere('category.id = :categoryId', {
-        categoryId: query.categoryId,
-      });
+      // Support both single categoryId and comma-separated list
+      const categoryIds = Array.isArray(query.categoryId)
+        ? query.categoryId
+        : query.categoryId.split(',').filter(Boolean);
+      
+      if (categoryIds.length === 1) {
+        qb.andWhere('category.id = :categoryId', {
+          categoryId: categoryIds[0],
+        });
+      } else {
+        qb.andWhere('category.id IN (:...categoryIds)', {
+          categoryIds,
+        });
+      }
     }
 
     if (query.minPrice !== undefined) {
@@ -151,6 +162,29 @@ export class ProductsService {
       take: limit,
       order: { salesCount: 'DESC' },
     });
+  }
+
+  async findRelated(productId: string, limit: number = 4): Promise<Product[]> {
+    const product = await this.findOne(productId);
+
+    if (!product.category) {
+      return [];
+    }
+
+    // Find products in the same category, excluding the current product
+    return this.productsRepository.find({
+      where: {
+        category: { id: product.category.id },
+        isActive: true,
+      },
+      relations: ['category'],
+      take: limit + 1, // Get one extra to filter out current product
+      order: { salesCount: 'DESC' },
+    }).then(products => 
+      products
+        .filter(p => p.id !== productId) // Exclude current product
+        .slice(0, limit) // Limit to requested number
+    );
   }
 
   async update(

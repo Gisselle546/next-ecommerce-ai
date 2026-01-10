@@ -15,17 +15,15 @@ const footerLinks = {
     { name: "Shipping", href: "/shipping" },
     { name: "Returns", href: "/returns" },
   ],
-  company: [
-    { name: "About Us", href: "/about" },
-    { name: "Careers", href: "/careers" },
-    { name: "Privacy Policy", href: "/privacy" },
-    { name: "Terms of Service", href: "/terms" },
-  ],
+  company: [{ name: "About Us", href: "/about" }],
 };
 
 export function Footer() {
   return (
-    <footer className="border-t" style={{ borderColor: 'var(--color-primary-600)' }}>
+    <footer
+      className="border-t"
+      style={{ borderColor: "var(--color-primary-600)" }}
+    >
       <Container>
         <div className="py-12 md:py-16">
           <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
@@ -95,7 +93,10 @@ export function Footer() {
         </div>
 
         {/* Bottom */}
-        <div className="border-t py-6" style={{ borderColor: 'var(--color-primary-600)' }}>
+        <div
+          className="border-t py-6"
+          style={{ borderColor: "var(--color-primary-600)" }}
+        >
           <p className="text-center text-sm text-primary-600">
             &copy; {new Date().getFullYear()} ShopHaven. All rights reserved.
           </p>

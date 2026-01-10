@@ -2,6 +2,8 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  forwardRef,
+  Inject,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TreeRepository } from 'typeorm';
@@ -9,12 +11,15 @@ import { Category } from './entities/category.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { PaginationQueryDto } from '../common/dto/pagination.dto';
+import { ProductsService } from '../products/products.service';
 
 @Injectable()
 export class CategoriesService {
   constructor(
     @InjectRepository(Category)
     private categoriesRepository: TreeRepository<Category>,
+    @Inject(forwardRef(() => ProductsService))
+    private productsService: ProductsService,
   ) {}
 
   async create(createCategoryDto: CreateCategoryDto): Promise<Category> {
@@ -161,21 +166,34 @@ export class CategoriesService {
 
   async getCategoryProducts(
     id: string,
-    _paginationQuery: PaginationQueryDto,
+    paginationQuery: PaginationQueryDto,
   ): Promise<any> {
     const category = await this.findOne(id);
 
-    // Get all descendant categories
-    const descendants =
-      await this.categoriesRepository.findDescendants(category);
+    // Get all descendant categories (including the category itself)
+    const descendants = await this.categoriesRepository.findDescendants(category);
     const categoryIds = descendants.map((cat) => cat.id);
 
-    // This would require the ProductsRepository - simplified example
-    // In real implementation, inject ProductsService and call its method
+    // Fetch products for this category and all its descendants
+    const products = await this.productsService.findAll({
+      categoryId: categoryIds.length === 1 ? id : categoryIds.join(','),
+      page: paginationQuery.page,
+      limit: paginationQuery.limit,
+      order: paginationQuery.order,
+    } as any);
+
     return {
-      message: 'Use ProductsService to query products by categoryIds',
-      categoryIds,
+      category,
+      products,
     };
+  }
+
+  async getCategoryProductsBySlug(
+    slug: string,
+    paginationQuery: PaginationQueryDto,
+  ): Promise<any> {
+    const category = await this.findBySlug(slug);
+    return this.getCategoryProducts(category.id, paginationQuery);
   }
 
   private generateSlug(name: string): string {

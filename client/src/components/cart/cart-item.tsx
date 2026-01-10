@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { X, Minus, Plus, ShoppingBag } from "lucide-react";
 import type { CartItem as CartItemType } from "@/types";
@@ -30,13 +29,11 @@ export function CartItem({ item }: CartItemProps) {
         href={ROUTES.PRODUCT(item.product.slug)}
         className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-gray-100"
       >
-        {item.product.images[0] ? (
-          <Image
+        {item.product.images && item.product.images[0] ? (
+          <img
             src={item.product.images[0]}
             alt={item.product.name}
-            fill
-            className="object-cover"
-            sizes="80px"
+            className="h-full w-full object-cover"
           />
         ) : (
           <div className="flex h-full items-center justify-center">
@@ -97,7 +94,7 @@ export function CartItem({ item }: CartItemProps) {
 
           {/* Price */}
           <span className="text-sm font-medium text-gray-900">
-            {formatPrice(item.price * item.quantity)}
+            {formatPrice(Number(item.price) * item.quantity)}
           </span>
         </div>
       </div>

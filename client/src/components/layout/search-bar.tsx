@@ -109,7 +109,7 @@ export function SearchBar() {
                     value={query}
                     onChange={(e) => handleSearch(e.target.value)}
                     placeholder="Search products..."
-                    className="w-full pl-12 pr-10 py-3.5 text-body-sm bg-gray-50 rounded-xl focus:outline-none focus:bg-gray-100 transition-all placeholder:text-gray-400"
+                    className="w-full pl-12 pr-10 py-3.5 text-body-sm bg-gray-50  text-gray-900 rounded-xl focus:outline-none focus:bg-gray-100 transition-all placeholder:text-gray-400"
                   />
                   {query && (
                     <button

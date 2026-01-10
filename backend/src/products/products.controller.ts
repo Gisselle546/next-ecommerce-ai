@@ -60,6 +60,25 @@ export class ProductsController {
   }
 
   @Public()
+  @Get('slug/:slug')
+  @SkipThrottle()
+  @ApiOperation({ summary: 'Get product by slug' })
+  @ApiResponse({ status: 200, description: 'Product found' })
+  @ApiResponse({ status: 404, description: 'Product not found' })
+  findBySlug(@Param('slug') slug: string) {
+    return this.productsService.findBySlug(slug);
+  }
+
+  @Public()
+  @Get(':id/related')
+  @SkipThrottle()
+  @ApiOperation({ summary: 'Get related products' })
+  @ApiResponse({ status: 200, description: 'Related products retrieved' })
+  findRelated(@Param('id') id: string, @Query('limit') limit?: number) {
+    return this.productsService.findRelated(id, limit);
+  }
+
+  @Public()
   @Get(':id')
   @SkipThrottle()
   @ApiOperation({ summary: 'Get product by ID' })

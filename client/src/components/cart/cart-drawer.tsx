@@ -49,7 +49,11 @@ export function CartDrawer() {
               <p className="mt-2 text-sm text-gray-500">
                 Add some products to get started!
               </p>
-              <Button onClick={closeCart} variant="outline" className="mt-6">
+              <Button
+                onClick={closeCart}
+                variant="outline"
+                className="mt-6 text-gray-900"
+              >
                 Continue Shopping
               </Button>
             </div>

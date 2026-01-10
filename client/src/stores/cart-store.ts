@@ -35,6 +35,7 @@ export const useCartStore = create<CartState>()(
       isLoading: false,
 
       addItem: (product, variant, quantity = 1) => {
+        console.log('CartStore addItem called:', { product, variant, quantity });
         const { items } = get();
         const existingItemIndex = items.findIndex(
           (item) =>
@@ -42,18 +43,21 @@ export const useCartStore = create<CartState>()(
         );
 
         if (existingItemIndex > -1) {
+          console.log('Item exists, updating quantity');
           const updatedItems = [...items];
           updatedItems[existingItemIndex].quantity += quantity;
           set({ items: updatedItems });
         } else {
+          console.log('Adding new item to cart');
           const newItem: CartItem = {
             id: `${product.id}-${variant?.id || "default"}-${Date.now()}`,
             product,
             variant,
             quantity,
-            price: variant?.price || product.price,
+            price: Number(variant?.price || product.price),
           };
           set({ items: [...items, newItem] });
+          console.log('Cart items after add:', [...items, newItem]);
         }
       },
 
@@ -94,7 +98,7 @@ export const useCartStore = create<CartState>()(
 
       subtotal: () => {
         return get().items.reduce(
-          (total, item) => total + item.price * item.quantity,
+          (total, item) => total + Number(item.price) * item.quantity,
           0
         );
       },

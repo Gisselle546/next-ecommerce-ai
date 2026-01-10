@@ -57,6 +57,16 @@ export class CategoriesController {
   }
 
   @Public()
+  @Get('slug/:slug')
+  @SkipThrottle()
+  @ApiOperation({ summary: 'Get category by slug' })
+  @ApiResponse({ status: 200, description: 'Category found' })
+  @ApiResponse({ status: 404, description: 'Category not found' })
+  findBySlug(@Param('slug') slug: string) {
+    return this.categoriesService.findBySlug(slug);
+  }
+
+  @Public()
   @Get(':id')
   @SkipThrottle()
   @ApiOperation({ summary: 'Get category by ID' })
@@ -90,6 +100,17 @@ export class CategoriesController {
   @ApiResponse({ status: 409, description: 'Category has subcategories' })
   remove(@Param('id') id: string) {
     return this.categoriesService.remove(id);
+  }
+
+  @Public()
+  @Get('slug/:slug/products')
+  @ApiOperation({ summary: 'Get products in category by slug' })
+  @ApiResponse({ status: 200, description: 'Products retrieved successfully' })
+  getCategoryProductsBySlug(
+    @Param('slug') slug: string,
+    @Query() paginationQuery: PaginationQueryDto,
+  ) {
+    return this.categoriesService.getCategoryProductsBySlug(slug, paginationQuery);
   }
 
   @Public()

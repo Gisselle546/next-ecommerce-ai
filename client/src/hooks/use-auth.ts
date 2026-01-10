@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { authApi } from "@/lib/api";
 import { useAuthStore } from "@/stores";
@@ -9,6 +9,7 @@ import type { LoginCredentials, RegisterCredentials } from "@/types";
 
 export function useAuth() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const queryClient = useQueryClient();
   const { user, isAuthenticated, setUser, setTokens, clearAuth, setLoading } =
     useAuthStore();
@@ -29,7 +30,10 @@ export function useAuth() {
       setTokens(data.tokens);
       setUser(data.user);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USER });
-      router.push(ROUTES.HOME);
+      
+      // Redirect to the specified URL or home
+      const redirectUrl = searchParams?.get('redirect') || ROUTES.HOME;
+      router.push(redirectUrl);
     },
   });
 
@@ -41,7 +45,10 @@ export function useAuth() {
       setTokens(data.tokens);
       setUser(data.user);
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USER });
-      router.push(ROUTES.HOME);
+      
+      // Redirect to the specified URL or home
+      const redirectUrl = searchParams?.get('redirect') || ROUTES.HOME;
+      router.push(redirectUrl);
     },
   });
 
