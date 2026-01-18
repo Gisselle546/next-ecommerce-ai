@@ -1,0 +1,6 @@
+resources:
+  - namespace.yaml
+  - deployment.yaml
+  - service.yaml
+
+# Image is a placeholder; CI should replace `REPLACE_IMAGE` with a real image URI

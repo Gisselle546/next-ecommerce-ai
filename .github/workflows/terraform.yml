@@ -1,0 +1,57 @@
+name: Terraform
+
+on:
+  pull_request:
+    paths:
+      - 'infrastructure/**'
+  workflow_dispatch:
+
+jobs:
+  terraform-plan:
+    name: Terraform Plan (PR)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./infrastructure
+      - name: Terraform Format Check
+        run: terraform fmt -check
+        working-directory: ./infrastructure
+      - name: Terraform Plan
+        run: terraform plan -var-file=envs/prod.tfvars -out=tfplan
+        working-directory: ./infrastructure
+      - name: Upload Plan
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: infrastructure/tfplan
+
+  terraform-apply:
+    name: Terraform Apply (manual)
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch'
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+      - name: Terraform Init
+        run: terraform init
+        working-directory: ./infrastructure
+      - name: Terraform Apply
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        # The DB password is read from AWS Secrets Manager by Terraform using
+        # the `db_secret_name` variable set in envs/prod.tfvars. Ensure the
+        # credentials used by this workflow have permission to read the secret.
+        run: terraform apply -var-file=envs/prod.tfvars -auto-approve
+        working-directory: ./infrastructure

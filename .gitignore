@@ -18,3 +18,7 @@ Thumbs.db
 
 # Docker volumes (if using local bind mounts)
 data/
+
+client/.next/
+client/node_modules/
+infrastructure/envs/*.tfvars

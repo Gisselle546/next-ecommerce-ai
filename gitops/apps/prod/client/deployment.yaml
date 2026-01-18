@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ecomrest-client
+  labels:
+    app: ecomrest-client
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ecomrest-client
+  template:
+    metadata:
+      labels:
+        app: ecomrest-client
+    spec:
+      containers:
+        - name: client
+          image: REPLACE_IMAGE
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "production"
+          readinessProbe:
+            httpGet:
+              path: /_
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /_
+              port: 3000
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "256Mi"
+            limits:
+              cpu: "400m"
+              memory: "512Mi"

@@ -1,0 +1,16 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ecomrest-backend-prod
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: "https://github.com/Gisselle546/next-ecommerce-ai.git"
+    path: "apps/prod/backend"
+    targetRevision: HEAD
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: backend
+  # Automated sync intentionally disabled so this app is configured
+  # in ArgoCD but will not be deployed until you manually sync it.

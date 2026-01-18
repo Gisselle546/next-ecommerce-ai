@@ -1,0 +1,82 @@
+name: CI Build & Update GitOps
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+env:
+  AWS_REGION: us-east-1
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          file: ./backend/Dockerfile
+          push: true
+          tags: ${{ secrets.ECR_REGISTRY }}/${{ github.repository_owner }}/ecomrest-backend:${{ github.sha }}
+
+      - name: Build and push client image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./client
+          file: ./client/Dockerfile
+          push: true
+          tags: ${{ secrets.ECR_REGISTRY }}/${{ github.repository_owner }}/ecomrest-client:${{ github.sha }}
+
+      - name: Checkout GitOps repo
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ secrets.GITOPS_REPO }}
+          token: ${{ secrets.GITOPS_TOKEN }}
+          path: gitops
+
+      - name: Update GitOps manifests (set images and push)
+        run: |
+          set -euo pipefail
+          BACKEND_IMAGE="${{ secrets.ECR_REGISTRY }}/${{ github.repository_owner }}/ecomrest-backend:${{ github.sha }}"
+          CLIENT_IMAGE="${{ secrets.ECR_REGISTRY }}/${{ github.repository_owner }}/ecomrest-client:${{ github.sha }}"
+          cd gitops
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+
+          update_file() {
+            local file="$1"
+            local image="$2"
+            if [ -f "$file" ]; then
+              # replace first occurrence of 'image: ' in the file (deployment container image)
+              if grep -q "image:\s" "$file"; then
+                sed -i.bak "0,/image:/s|image: .*|image: ${image}|" "$file"
+                rm -f "${file}.bak"
+              else
+                echo "warning: no image: key found in $file"
+              fi
+            fi
+          }
+
+          update_file apps/prod/backend/deployment.yaml "${BACKEND_IMAGE}"
+          update_file apps/prod/client/deployment.yaml "${CLIENT_IMAGE}"
+
+          git add -A
+          if git diff --staged --quiet; then
+            echo "no changes to commit"
+          else
+            git commit -m "ci: bump images to ${{ github.sha }}"
+            git push origin HEAD
+          fi
