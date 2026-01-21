@@ -85,38 +85,26 @@ Client: http://localhost:4200
 
 API: http://localhost:3000/api/v1
 
-Repo Map
+## Repo Map
 
-Root docs: you are here ✅
+> Start here, then jump into the area you care about.
 
-Backend: /backend
- — API, DB, auth, domain logic
-
-Client: /client
- — UI, pages, client state, integration
-
-GitOps: /gitops
- — ArgoCD apps/manifests/Helm/Kustomize
-
-Infra: /infra
- — Terraform, environments, cluster & networking
-
-CI/CD Overview
-
-CI (GitHub Actions)
-
-Lint + typecheck
+- ✅ **Root docs:** you are here
+- 🧠 **Backend:** [`/backend`](./backend)  
+  API, DB, auth, domain logic
+- 🎨 **Client:** [`/client`](./client)  
+  UI, pages, client state, integration
+- 🚀 **GitOps:** [`/gitops`](./gitops)  
+  ArgoCD apps, manifests, Helm/Kustomize
+- 🏗️ **Infra:** [`/infra`](./infra)  
+  Terraform, environments, cluster & networking
 
 
-Build Docker images
+## CI/CD Overview
 
-Push to registry (tag + digest)
+### CI (GitHub Actions)
+**Goals:** keep `main` healthy + publish deployable artifacts.
 
-CD (GitOps via ArgoCD)
-
-Update Kubernetes manifests (image tag/digest)
-
-ArgoCD detects Git change and syncs
-
-Kubernetes rolls out new pods with health checks
-
+- ✅ Lint + typecheck
+- 🐳 Build Docker images
+- 📦 Push to registry 
