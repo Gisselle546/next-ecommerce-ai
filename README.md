@@ -74,8 +74,9 @@ Lint/Format: ESLint, Prettier
 Prereqs: Node.js (LTS), Docker, Docker Compose
 
 # 1) Clone
-git clone "https://github.com/<you>/<repo>.git](https://github.com/Gisselle546/next-ecommerce-ai.git"
-
+```bash
+git clone https://github.com/Gisselle546/next-ecommerce-ai.git
+```
 cd <repo>
 
 # 3) Start dependencies (db, etc.)
