@@ -1,4 +1,4 @@
-# Next-ECommerce AI (Next.js + NestJS + GitOps)
+# ShopHaven-ECommerce AI (Next.js + NestJS + GitOps)
 
 A production-style e-commerce platform built with a modern full-stack architecture (Next.js frontend + NestJS API), deployed via GitOps, and designed to be extended with AI features like review summaries and product Q&A.
 
