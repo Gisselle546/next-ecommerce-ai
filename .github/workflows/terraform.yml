@@ -11,8 +11,16 @@ jobs:
     name: Terraform Plan (PR)
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          aws-region: us-east-1
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -37,8 +45,16 @@ jobs:
     runs-on: ubuntu-latest
     if: github.event_name == 'workflow_dispatch'
     environment: production
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          aws-region: us-east-1
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
@@ -47,11 +63,8 @@ jobs:
         run: terraform init
         working-directory: ./infrastructure
       - name: Terraform Apply
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         # The DB password is read from AWS Secrets Manager by Terraform using
         # the `db_secret_name` variable set in envs/prod.tfvars. Ensure the
-        # credentials used by this workflow have permission to read the secret.
+        # OIDC role has permission to read the secret.
         run: terraform apply -var-file=envs/prod.tfvars -auto-approve
         working-directory: ./infrastructure

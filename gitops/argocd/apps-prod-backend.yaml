@@ -7,8 +7,8 @@ spec:
   project: default
   source:
     repoURL: "https://github.com/Gisselle546/next-ecommerce-ai.git"
-    path: "apps/prod/backend"
-    targetRevision: HEAD
+    path: "gitops/apps/prod/backend"
+    targetRevision: "main"
   destination:
     server: "https://kubernetes.default.svc"
     namespace: backend

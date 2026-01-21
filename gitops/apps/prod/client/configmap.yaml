@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: client-config
+  namespace: client
+  labels:
+    app: ecomrest-client
+data:
+  api-url: "http://ecomrest-backend.backend.svc.cluster.local:3000"
+  # Update to external URL when ingress is configured:
+  # api-url: "https://api.yourdomain.com"

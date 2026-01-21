@@ -1,3 +1,13 @@
+variable "project" {
+  type    = string
+  default = "ecomrest"
+}
+
+variable "env" {
+  type    = string
+  default = "prod"
+}
+
 variable "role_name" {
   type    = string
   default = "ecomrest-github-actions"

@@ -1,0 +1,24 @@
+# Production Terraform Variables
+# Copy this file to prod.tfvars and fill in the values
+# DO NOT commit prod.tfvars to git (it's in .gitignore)
+
+project = "ecomrest"
+env     = "prod"
+
+# Network Configuration
+vpc_cidr        = "10.0.0.0/16"
+public_subnets  = ["10.0.1.0/24", "10.0.2.0/24"]
+private_subnets = ["10.0.101.0/24", "10.0.102.0/24"]
+
+# Database Configuration
+db_name     = "ecomrest"
+db_username = "ecomrest_admin"
+
+# AWS Secrets Manager secret name/ARN for DB password
+# This should be created by the bootstrap script
+# Example: "arn:aws:secretsmanager:us-east-1:123456789012:secret:/prod/ecomrest/db_password-AbCdEf"
+db_secret_name = ""  # Fill this in after running bootstrap script
+
+# GitHub Actions OIDC Configuration
+# Restricts which GitHub repos can assume the IAM role
+github_sub_condition = "repo:Gisselle546/next-ecommerce-ai:ref:refs/heads/main"

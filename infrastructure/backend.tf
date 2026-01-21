@@ -1,10 +1,9 @@
 terraform {
-  # Remote state for production (update bucket/table names before first use)
   backend "s3" {
-    bucket         = "ecomrest-terraform-state" # change to your bucket
+    bucket         = "ecomrest-terraform-state"
     key            = "prod/terraform.tfstate"
-    region         = var.aws_region
-    dynamodb_table = "ecomrest-terraform-locks" # change or create
+    region         = "us-east-1"                # literal value required
+    dynamodb_table = "ecomrest-terraform-locks"
     encrypt        = true
   }
 }

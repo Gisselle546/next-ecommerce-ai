@@ -35,5 +35,5 @@ variable "db_name"     { type = string }
 
 variable "github_sub_condition" {
   type    = string
-  default = "repo:*/*:ref:refs/heads/main"
+  default = "repo:Gisselle546/next-ecommerce-ai:ref:refs/heads/main"
 }

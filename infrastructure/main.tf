@@ -12,11 +12,19 @@ module "vpc" {
 module "ecr_backend" {
   source = "./modules/ecr"
   name   = "${var.project}-backend"
+  tags = {
+    Project = var.project
+    Env     = var.env
+  }
 }
 
 module "ecr_client" {
   source = "./modules/ecr"
   name   = "${var.project}-client"
+  tags = {
+    Project = var.project
+    Env     = var.env
+  }
 }
 
 module "eks" {
@@ -24,7 +32,10 @@ module "eks" {
   cluster_name = "${var.project}-${var.env}-eks"
   vpc_id       = module.vpc.vpc_id
   private_subnets = module.vpc.private_subnets
-  public_subnets  = module.vpc.public_subnets
+  tags = {
+    Project = var.project
+    Env     = var.env
+  }
 }
 
 module "rds" {
@@ -34,17 +45,24 @@ module "rds" {
   # password is read from AWS Secrets Manager (see data.aws_secretsmanager_secret_version.db_password)
   password    = data.aws_secretsmanager_secret_version.db_password.secret_string
   subnet_ids  = module.vpc.private_subnets
+  vpc_id      = module.vpc.vpc_id
+  vpc_cidr    = var.vpc_cidr
 }
 
 module "redis" {
-  source = "./modules/redis"
+  source     = "./modules/redis"
+  cluster_id = "${var.project}-${var.env}-redis"
   subnet_ids = module.vpc.private_subnets
+  vpc_id     = module.vpc.vpc_id
+  vpc_cidr   = var.vpc_cidr
 }
 
 # IAM role for GitHub Actions (OIDC)
 module "iam_ci" {
   source = "./modules/iam"
+  project = var.project
+  env = var.env
   # Default allows any repo on main branch; replace for tighter security
   github_sub_condition = var.github_sub_condition
-  db_secret_arn = "" # optional: set if you want the policy scoped to a specific secret
+  db_secret_arn = var.db_secret_name # optional: set if you want the policy scoped to a specific secret
 }

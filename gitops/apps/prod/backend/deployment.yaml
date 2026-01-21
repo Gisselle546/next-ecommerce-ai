@@ -14,6 +14,8 @@ spec:
       labels:
         app: ecomrest-backend
     spec:
+      imagePullSecrets:
+        - name: ecr-credentials
       containers:
         - name: backend
           image: REPLACE_IMAGE
@@ -22,6 +24,16 @@ spec:
           env:
             - name: NODE_ENV
               value: "production"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: database-url
+            - name: REDIS_URL
+              valueFrom:
+                secretKeyRef:
+                  name: backend-secrets
+                  key: redis-url
           readinessProbe:
             httpGet:
               path: /health
