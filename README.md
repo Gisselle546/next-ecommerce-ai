@@ -96,7 +96,6 @@ npm run dev
 Frontend: http://localhost:4200
 
 API: http://localhost:3000/api/v1
- depending on your setup)
 
 Repo Map
 
