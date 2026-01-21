@@ -77,7 +77,7 @@ Prereqs: Node.js (LTS), Docker, Docker Compose
 ```bash
 git clone https://github.com/Gisselle546/next-ecommerce-ai.git
 ```
-cd <repo>
+cd next-ecommerce-ai
 
 # 3) Start dependencies (db, etc.)
 docker compose up -d
