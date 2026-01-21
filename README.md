@@ -87,13 +87,13 @@ cd backend
 npm install
 npm run start:dev
 
-# 5) Frontend (new terminal)
-cd ../frontend
+# 5) Frontend 
+cd client
 npm install
 npm run dev
 
 
-Frontend: http://localhost:4200
+Client: http://localhost:4200
 
 API: http://localhost:3000/api/v1
 
@@ -104,7 +104,7 @@ Root docs: you are here ✅
 Backend: /backend
  — API, DB, auth, domain logic
 
-Frontend: /frontend
+Client: /client
  — UI, pages, client state, integration
 
 GitOps: /gitops
