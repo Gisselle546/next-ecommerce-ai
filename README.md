@@ -12,11 +12,7 @@ A production-style e-commerce platform built with a modern full-stack architectu
 ---
 
 ## Live Demo
-
-- **Web app:**
-- **API:**
-- **Swagger**
-  > No live demo yet? Replace this section with: “Coming soon — run locally in 5 minutes (see Quickstart).”
+“Coming soon — run locally in 5 minutes (see Quickstart).”
 
 ---
 
@@ -31,47 +27,39 @@ https://github.com/user-attachments/assets/c635dfee-cebc-4acf-8f8e-6c01f6c22c79
 
 <img width="1392" height="958" alt="Screenshot 2026-01-20 at 8 16 13 PM" src="https://github.com/user-attachments/assets/e09ee988-4225-47db-99e3-584abc34d731" />
 
-# Tech Stack
+## Tech Stack
 
--Frontend
+### 🖥️ Frontend
+- Next.js (React), TypeScript
+- TailwindCSS 
 
-Next.js (React), TypeScript
+### 🧠 Backend
+- NestJS (TypeScript)
+- REST API: `/api/v1`
+- Validation: `class-validator`
 
-UI: TailwindCSS (+ any component library if used)
+### 🗄️ Data
+- PostgreSQL
+- TypeORM
 
--Backend
+### ☁️ Infra / Platform
+- Docker, Docker Compose (local)
+- Terraform (IaC)
+- AWS EKS (Kubernetes)
+- ArgoCD (GitOps CD)
 
-NestJS (TypeScript)
+### ✅ Observability & Quality
+- Logging: Pino/Winston
+- ESLint, Prettier
 
-REST API: /api/v1
 
-Validation: class-validator
+## Quickstart (Local)
 
--Data
+### Prerequisites
+- Node.js (LTS)
+- Docker + Docker Compose
 
-PostgreSQL
-
-ORM: TypeORM 
-
--Infra / Platform
-
-Docker
-
-Kubernetes EKS 
-
-Terraform (IaC)
-
-ArgoCD (GitOps CD)
-
-Observability & Quality
-
-Logging: (pino/winston)
-
-Lint/Format: ESLint, Prettier
-
-#Quickstart (Local)
-
-Prereqs: Node.js (LTS), Docker, Docker Compose
+### Run
 
 # 1) Clone
 ```bash
@@ -79,7 +67,7 @@ git clone https://github.com/Gisselle546/next-ecommerce-ai.git
 ```
 cd next-ecommerce-ai
 
-# 3) Start dependencies (db, etc.)
+# 2) start local stack
 docker compose up -d
 
 # 4) Backend
