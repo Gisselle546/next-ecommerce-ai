@@ -33,13 +33,13 @@ https://github.com/user-attachments/assets/c635dfee-cebc-4acf-8f8e-6c01f6c22c79
 
 # Tech Stack
 
-Frontend
+-Frontend
 
 Next.js (React), TypeScript
 
 UI: TailwindCSS (+ any component library if used)
 
-Backend
+-Backend
 
 NestJS (TypeScript)
 
@@ -47,13 +47,13 @@ REST API: /api/v1
 
 Validation: class-validator
 
-Data
+-Data
 
 PostgreSQL
 
 ORM: TypeORM 
 
-Infra / Platform
+-Infra / Platform
 
 Docker
 
@@ -74,7 +74,8 @@ Lint/Format: ESLint, Prettier
 Prereqs: Node.js (LTS), Docker, Docker Compose
 
 # 1) Clone
-git clone https://github.com/<you>/<repo>.git](https://github.com/Gisselle546/next-ecommerce-ai.git
+git clone "https://github.com/<you>/<repo>.git](https://github.com/Gisselle546/next-ecommerce-ai.git"
+
 cd <repo>
 
 # 3) Start dependencies (db, etc.)
