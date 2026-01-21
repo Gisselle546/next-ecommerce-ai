@@ -19,3 +19,7 @@ A production-style e-commerce platform built with a modern full-stack architectu
   > No live demo yet? Replace this section with: “Coming soon — run locally in 5 minutes (see Quickstart).”
 
 ---
+
+## Screenshots / GIFs
+https://github.com/user-attachments/assets/c635dfee-cebc-4acf-8f8e-6c01f6c22c79
+
